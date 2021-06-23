@@ -65,6 +65,37 @@ def move_duplicate_files(md5_dictionary: defaultdict, duplicates_path: pathlib.P
                 source.replace(destination)
 
 
+def delete_duplicate_fules(md5_dictionary: defaultdict):
+    for _, value in md5_dictionary.items():
+        duplicates = value[1:]
+        if len(duplicates) > 0:
+            for duplicate in duplicates:
+                duplicate.unlink()
+
+
+def delete_or_cut(parent_directory: pathlib.Path):
+    delete_or_not = input(
+        "Delete files (default) or enter folder name to cut duplicates into: "
+    )
+
+    if delete_or_not == "":
+        return delete_or_not
+    else:
+        duplicates_folder = parent_directory.joinpath(delete_or_not)
+
+        try:
+            duplicates_folder.mkdir()
+            return duplicates_folder
+        except FileExistsError:
+            print("Folder already exists, input a unique file name.")
+            delete_or_not(parent_directory)
+        except:
+            print(
+                "Could not create folder. Check folder name for invalid characters, or file creation permissions."
+            )
+            delete_or_not(parent_directory)
+
+
 def main():
     parent_directory = get_parent_directory()
     children = get_children(parent_directory)
@@ -79,9 +110,13 @@ def main():
 
     all_files = get_list_of_all_files(parent_directory)
     dupe_dict = create_md5_dictionary(all_files)
-    dupes_folder = create_duplicates_subfolder(parent_directory)
+    dupe_dir = delete_or_cut(parent_directory)
 
-    move_duplicate_files(dupe_dict, dupes_folder)
+    if dupe_dir != "":
+        dupes_folder = create_duplicates_subfolder(parent_directory)
+        move_duplicate_files(dupe_dict, dupes_folder)
+    else:
+        delete_duplicate_fules(dupe_dict)
 
 
 if __name__ == "__main__":

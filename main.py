@@ -71,7 +71,7 @@ def main():
 
     print("Parent Directory:", parent_directory)
     print("Sample of children: ")
-    for child in children:
+    for child in children[:5]:
         print(child)
     correct_dir = input("Correct directory? y/n: ")
     if not correct_dir == "y":

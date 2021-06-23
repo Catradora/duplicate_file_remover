@@ -10,10 +10,14 @@ root = tk.Tk()
 root.withdraw()
 
 
+def is_valid_directory(directory: pathlib.Path):
+    return directory.exists() and (directory != "" or directory is not None)
+
+
 def get_parent_directory():
     parent_directory = pathlib.Path(filedialog.askdirectory())
 
-    if not parent_directory.exists():
+    if not is_valid_directory(parent_directory):
         print("Path doesn't exist, try again.")
         get_parent_directory()
     else:
@@ -45,8 +49,10 @@ def create_md5_dictionary(files: List[pathlib.Path]):
     return md5_dict
 
 
-def create_duplicates_subfolder(parent_directory: pathlib.Path):
-    compound_path = parent_directory.joinpath("duplicates")
+def create_duplicates_subfolder(
+    parent_directory: pathlib.Path, dupes_subfolder: pathlib.Path
+):
+    compound_path = parent_directory.joinpath(dupes_subfolder)
 
     compound_path.mkdir(parents=False, exist_ok=True)
 
@@ -65,7 +71,7 @@ def move_duplicate_files(md5_dictionary: defaultdict, duplicates_path: pathlib.P
                 source.replace(destination)
 
 
-def delete_duplicate_fules(md5_dictionary: defaultdict):
+def delete_duplicate_files(md5_dictionary: defaultdict):
     for _, value in md5_dictionary.items():
         duplicates = value[1:]
         if len(duplicates) > 0:
@@ -113,10 +119,10 @@ def main():
     dupe_dir = delete_or_cut(parent_directory)
 
     if dupe_dir != "":
-        dupes_folder = create_duplicates_subfolder(parent_directory)
+        dupes_folder = create_duplicates_subfolder(parent_directory, dupe_dir)
         move_duplicate_files(dupe_dict, dupes_folder)
     else:
-        delete_duplicate_fules(dupe_dict)
+        delete_duplicate_files(dupe_dict)
 
 
 if __name__ == "__main__":

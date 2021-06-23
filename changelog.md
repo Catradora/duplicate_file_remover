@@ -6,6 +6,7 @@ All noteworthy changes to this project will be documented in this file.
 
 ### Added
 
+- functionality for choosing the folder into which duplicates should be moved, or the (default) of just deleting the duplicates
 - changelog file
 - requirements.txt for simpler portability
 

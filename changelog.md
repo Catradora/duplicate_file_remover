@@ -2,6 +2,11 @@
 
 All noteworthy changes to this project will be documented in this file.
 
+## [1.1.1] 2021-07-25
+
+### Fixed
+ - gather all user input prior to hashing; prevent users from having to wait and watch the program execute
+
 ## [1.1.0] 2021-06-23
 
 ### Added

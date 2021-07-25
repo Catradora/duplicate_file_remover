@@ -115,8 +115,8 @@ def main():
         return
 
     all_files = get_list_of_all_files(parent_directory)
-    dupe_dict = create_md5_dictionary(all_files)
     dupe_dir = delete_or_cut(parent_directory)
+    dupe_dict = create_md5_dictionary(all_files)
 
     if dupe_dir != "":
         dupes_folder = create_duplicates_subfolder(parent_directory, dupe_dir)
